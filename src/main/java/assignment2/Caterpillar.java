@@ -23,9 +23,9 @@ public class Caterpillar {
 
 	// Creates a Caterpillar with one Segment. It is up to students to decide how to implement this. 
 	public Caterpillar(Position p, Color c, int goal) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		this.head = new Segment(p, c);
+		this.goal = goal;
+		stage = EvolutionStage.FEEDING_STAGE;
 	}
 
 	public EvolutionStage getEvolutionStage() {
