@@ -43,9 +43,13 @@ public class Caterpillar {
 
 	// returns the color of the segment in position p. Returns null if such segment does not exist
 	public Color getSegmentColor(Position p) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		Segment chk = this.head;
+		for (int i = 0; i < length; i++) {
+			if (chk.position.equals(p)) {
+				return chk.color;
+			}
+			chk = chk.next;
+		}
 		return null;
 	}
 	
@@ -74,19 +78,33 @@ public class Caterpillar {
     
 	// shift all Segments to the previous Position while maintaining the old color
 	// the length of the caterpillar is not affected by this
-	public void move(Position p) {
+	public void move(Position p) throws IllegalArgumentException {
 		/*
 		 * TODO: ADD YOUR CODE HERE
-		 */	
+		 */
+		// Check if position is orthogonal to the current head position
+		int xHead = getHeadPosition().getX();
+		int yHead = getHeadPosition().getY();
+		int x = p.getX();
+		int y = p.getY();
+		if (x == xHead && Math.abs(y - yHead) == 1 || y == yHead && Math.abs(x - xHead) == 1) {
+			// TODO
+			return;
+		} else {
+			throw new IllegalArgumentException("The caterpillar can only move to an adjacent position.");
+		}
 	}
 
 
 
 	// a segment of the fruit's color is added at the end
 	public void eat(Fruit f) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		// Create new segment at tail of caterpillar with position of tail and color of fruit
+		Position tailPosition = positionsPreviouslyOccupied.peek(); // TODO Pop or Peek?
+		Segment newSegment = new Segment(tailPosition, f.getColor());
+		newSegment.next = tail;
+		tail = newSegment;
+		length++;
 	}
 
 	
