@@ -25,10 +25,10 @@ public class Caterpillar {
 	public Caterpillar(Position p, Color c, int goal) {
 		this.head = this.tail = new Segment(p, c);
 		this.goal = goal;
-		stage = EvolutionStage.FEEDING_STAGE;
-		length = 1;
-		positionsPreviouslyOccupied = new MyStack<Position>();
-		positionsPreviouslyOccupied.push(p);
+		this.stage = EvolutionStage.FEEDING_STAGE;
+		this.length = 1;
+		this.positionsPreviouslyOccupied = new MyStack<Position>();
+		this.positionsPreviouslyOccupied.push(p);
 	}
 
 	public EvolutionStage getEvolutionStage() {
