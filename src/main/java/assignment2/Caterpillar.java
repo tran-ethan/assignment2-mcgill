@@ -82,17 +82,24 @@ public class Caterpillar {
 	// shift all Segments to the previous Position while maintaining the old color
 	// the length of the caterpillar is not affected by this
 	public void move(Position p) throws IllegalArgumentException {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */
 		// Check if position is orthogonal to the current head position
 		int xHead = getHeadPosition().getX();
 		int yHead = getHeadPosition().getY();
 		int x = p.getX();
 		int y = p.getY();
+		// Check for adjacent position
 		if (x == xHead && Math.abs(y - yHead) == 1 || y == yHead && Math.abs(x - xHead) == 1) {
-			// TODO
-			return;
+			// Check for previously occupied position
+			Segment current = this.head;
+			while (current != null) {
+				if (current.position.equals(p)) {
+					this.stage = EvolutionStage.ENTANGLED;
+					return;
+				}
+				current = current.next;
+			}
+			// Move the caterpillar
+
 		} else {
 			throw new IllegalArgumentException("The caterpillar can only move to an adjacent position.");
 		}
