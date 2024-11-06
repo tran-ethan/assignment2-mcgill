@@ -164,9 +164,20 @@ public class Caterpillar {
 	// brain freeze!!
 	// It reverses and its (new) head turns blue
 	public void eat(IceCream gelato) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		// Reverse caterpillar
+		Segment prev = null;
+		Segment chk = this.head;
+		while (chk != null) {
+			Segment tmp = chk.next;
+			chk.next = prev;
+			prev = chk;
+			chk = tmp;
+		}
+		this.tail = this.head;
+		this.head = prev;
+		this.head.color = GameColors.BLUE;
+		// Clear previous positions
+		positionsPreviouslyOccupied.clear();
 	}
 
 
