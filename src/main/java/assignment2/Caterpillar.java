@@ -145,9 +145,20 @@ public class Caterpillar {
 
 	// all the caterpillar's colors shuffle around
 	public void eat(Lollipop lolly) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		Color[] colors = this.getColors();
+		// Shuffle colors
+		for (int i = this.length - 1; i > 0; i--) {
+			int j = randNumGenerator.nextInt(i + 1);
+			Color tmp = colors[i];
+			colors[i] = colors[j];
+			colors[j] = tmp;
+		}
+		// Update colors
+		Segment chk = this.head;
+		for (int i = 0; i < this.length; i++) {
+			chk.color = colors[i];
+			chk = chk.next;
+		}
 	}
 
 	// brain freeze!!

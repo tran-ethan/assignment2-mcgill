@@ -1,6 +1,7 @@
 package assignment2;
 
 import assignment2.food.Fruit;
+import assignment2.food.Lollipop;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,5 +22,8 @@ public class Main {
         gus.move(new Position(3,1));
         System.out.println("\n4) Gus: " + gus);
         System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
+
+        gus.eat(new Lollipop());
+        System.out.println("\n5) Gus: " + gus);
     }
 }
