@@ -89,16 +89,24 @@ public class Caterpillar {
 		// Check for adjacent position
 		if (x == xHead && Math.abs(y - yHead) == 1 || y == yHead && Math.abs(x - xHead) == 1) {
 			// Check for previously occupied position
-			Segment current = this.head;
-			while (current != null) {
-				if (current.position.equals(p)) {
+			Segment chk = this.head;
+			while (chk != null) {
+				if (chk.position.equals(p)) {
 					this.stage = EvolutionStage.ENTANGLED;
 					return;
 				}
-				current = current.next;
+				chk = chk.next;
 			}
 			// Move the caterpillar
-
+			chk = this.head;
+            for (int i = 0; i < length; i++) {
+                Position tmp = chk.position;
+				chk.position = p;
+				p = tmp;
+				chk = chk.next;
+			}
+			// Add previously occupied position to stack
+			positionsPreviouslyOccupied.push(p);
 		} else {
 			throw new IllegalArgumentException("The caterpillar can only move to an adjacent position.");
 		}
