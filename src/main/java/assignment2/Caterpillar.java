@@ -103,10 +103,9 @@ public class Caterpillar {
 	// a segment of the fruit's color is added at the end
 	public void eat(Fruit f) {
 		// Create new segment at tail of caterpillar with position of tail and color of fruit
-		Position tailPosition = positionsPreviouslyOccupied.peek(); // TODO Pop or Peek?
-		Segment newSegment = new Segment(tailPosition, f.getColor());
-		newSegment.next = tail;
-		tail = newSegment;
+		Position tailPosition = positionsPreviouslyOccupied.pop(); // TODO Pop or Peek?
+        tail.next = new Segment(tailPosition, f.getColor());
+		tail = tail.next;
 		length++;
 	}
 
