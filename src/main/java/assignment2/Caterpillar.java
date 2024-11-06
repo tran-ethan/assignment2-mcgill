@@ -28,7 +28,6 @@ public class Caterpillar {
 		this.stage = EvolutionStage.FEEDING_STAGE;
 		this.length = 1;
 		this.positionsPreviouslyOccupied = new MyStack<Position>();
-		this.positionsPreviouslyOccupied.push(p);
 	}
 
 	public EvolutionStage getEvolutionStage() {
@@ -110,10 +109,13 @@ public class Caterpillar {
 	// a segment of the fruit's color is added at the end
 	public void eat(Fruit f) {
 		// Create new segment at tail of caterpillar with position of tail and color of fruit
-		Position tailPosition = positionsPreviouslyOccupied.pop(); // TODO Pop or Peek?
+		Position tailPosition = positionsPreviouslyOccupied.pop();
         tail.next = new Segment(tailPosition, f.getColor());
 		tail = tail.next;
 		length++;
+		if (length == goal) {
+			stage = EvolutionStage.BUTTERFLY;
+		}
 	}
 
 	
