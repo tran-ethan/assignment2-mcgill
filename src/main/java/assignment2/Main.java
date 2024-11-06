@@ -20,8 +20,6 @@ public class Main {
 
         gus.move(new Position(3,1));
         System.out.println("\n4) Gus: " + gus);
-
-        gus.move(new Position(4,1));
-        System.out.println("\n5) Gus: " + gus);
+        System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
     }
 }

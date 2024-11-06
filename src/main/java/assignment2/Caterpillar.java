@@ -93,11 +93,12 @@ public class Caterpillar {
 			while (chk != null) {
 				if (chk.position.equals(p)) {
 					this.stage = EvolutionStage.ENTANGLED;
+					System.out.println("The caterpillar has entangled itself.");
 					return;
 				}
 				chk = chk.next;
 			}
-			// Move the caterpillar
+			// Move caterpillar by moving each segment to next position
 			chk = this.head;
             for (int i = 0; i < length; i++) {
                 Position tmp = chk.position;
@@ -129,9 +130,16 @@ public class Caterpillar {
 	
 	// the caterpillar moves one step backwards because of sourness
 	public void eat(Pickle p) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		Position previous = positionsPreviouslyOccupied.pop();
+		Segment chk = this.head;
+		for (int i = 0; i < this.length; i++) {
+			if (i == this.length - 1) {
+				chk.position = previous;
+			} else {
+				chk.position = chk.next.position;
+			}
+			chk = chk.next;
+		}
 	}
 
 
