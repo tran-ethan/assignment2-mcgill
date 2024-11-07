@@ -1,6 +1,7 @@
 package assignment2;
 
 import java.awt.Color;
+import java.util.EmptyStackException;
 import java.util.Random;
 
 import assignment2.food.*;
@@ -241,9 +242,53 @@ public class Caterpillar {
 
 	
 	public void eat(Cake cake) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		this.stage = EvolutionStage.GROWING_STAGE;
+
+		int energy = cake.getEnergyProvided();
+		// 1 energy = 1 segment
+		for (int i = 1; i <= energy; i++) {
+			try {
+				// Could throw an error if stack is empty
+				Position toAdd = positionsPreviouslyOccupied.pop();
+
+				// Check for if the position to add is already being occupied by caterpillar
+				Segment chk = this.head;
+				while (chk != null) {
+					if (chk.position.equals(toAdd)) {
+						// Throw exception if position is already occupied
+						throw new EmptyStackException();
+					}
+					chk = chk.next;
+				}
+				// If no exception was thrown at this point, that means we can add the segment to the tail
+
+				// Generate a random color for the new segment
+				int rand = randNumGenerator.nextInt(GameColors.SEGMENT_COLORS.length);
+				Color color = GameColors.SEGMENT_COLORS[rand];
+
+				// Add new segment to the tail
+				this.tail.next = new Segment(toAdd, color);
+				this.tail = this.tail.next;
+				length++;
+
+				// Check if caterpillar has reached goal
+				if (length == goal) {
+					stage = EvolutionStage.BUTTERFLY;
+					return;
+				}
+
+				// Check if butterfly has consumed all the energy of the cake
+				if (i == energy) {
+					turnsNeededToDigest = 0;
+					stage = EvolutionStage.FEEDING_STAGE;
+				}
+			} catch (EmptyStackException e) {
+				// Exception is thrown if all the energy of the cake cannot be consumed in this function
+                // Set turns to remaining energy that has not yet been consumed
+				turnsNeededToDigest = energy - i;
+			}
+		}
+
 	}
 
 
