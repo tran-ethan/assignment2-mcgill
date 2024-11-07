@@ -86,8 +86,10 @@ public class Caterpillar {
 		int yHead = getHeadPosition().getY();
 		int x = p.getX();
 		int y = p.getY();
+
 		// Check for adjacent position
 		if (x == xHead && Math.abs(y - yHead) == 1 || y == yHead && Math.abs(x - xHead) == 1) {
+
 			// Check for previously occupied position
 			Segment chk = this.head;
 			while (chk != null) {
@@ -98,6 +100,7 @@ public class Caterpillar {
 				}
 				chk = chk.next;
 			}
+
 			// Move caterpillar by moving each segment to next position
 			chk = this.head;
             for (int i = 0; i < length; i++) {
@@ -106,9 +109,11 @@ public class Caterpillar {
 				p = tmp;
 				chk = chk.next;
 			}
+
 			// Add previously occupied position to stack
 			positionsPreviouslyOccupied.push(p);
 		} else {
+			// Position is not adjacent and orthogonal to head
 			throw new IllegalArgumentException("The caterpillar can only move to an adjacent position.");
 		}
 	}
@@ -121,6 +126,8 @@ public class Caterpillar {
 		Position tailPosition = positionsPreviouslyOccupied.pop();
         tail.next = new Segment(tailPosition, f.getColor());
 		tail = tail.next;
+
+		// Adjust length and stage
 		length++;
 		if (length == goal) {
 			stage = EvolutionStage.BUTTERFLY;
@@ -134,8 +141,10 @@ public class Caterpillar {
 		Segment chk = this.head;
 		for (int i = 0; i < this.length; i++) {
 			if (i == this.length - 1) {
+				// Since chk.next would be null, we move the tail to the previous position occupied
 				chk.position = previous;
 			} else {
+				// Move every segment to its previous position (next segment in the list)
 				chk.position = chk.next.position;
 			}
 			chk = chk.next;
@@ -146,6 +155,7 @@ public class Caterpillar {
 	// all the caterpillar's colors shuffle around
 	public void eat(Lollipop lolly) {
 		Color[] colors = this.getColors();
+
 		// Shuffle colors
 		for (int i = this.length - 1; i > 0; i--) {
 			int j = randNumGenerator.nextInt(i + 1);
@@ -153,6 +163,7 @@ public class Caterpillar {
 			colors[i] = colors[j];
 			colors[j] = tmp;
 		}
+
 		// Update colors
 		Segment chk = this.head;
 		for (int i = 0; i < this.length; i++) {
@@ -164,18 +175,21 @@ public class Caterpillar {
 	// brain freeze!!
 	// It reverses and its (new) head turns blue
 	public void eat(IceCream gelato) {
-		// Reverse caterpillar
+		// Reverse linked list with two pointers
 		Segment prev = null;
 		Segment chk = this.head;
+
 		while (chk != null) {
 			Segment tmp = chk.next;
 			chk.next = prev;
 			prev = chk;
 			chk = tmp;
 		}
+
 		this.tail = this.head;
 		this.head = prev;
 		this.head.color = GameColors.BLUE;
+		
 		// Clear previous positions
 		positionsPreviouslyOccupied.clear();
 	}
@@ -183,9 +197,45 @@ public class Caterpillar {
 
 	// the caterpillar embodies a slide of Swiss cheese loosing half of its segments. 
 	public void eat(SwissCheese cheese) {
-		/*
-		 * TODO: ADD YOUR CODE HERE
-		 */	
+		// Size of new caterpillar the ceiling of length / 2
+		int newLength = (length + 1) / 2;
+		// Colors array contains every other color of the caterpillar
+		Color[] colors = new Color[newLength];
+		Segment chk = this.head;
+
+		// Create otherHalf stack to store unoccupied positions after eating cheese, since we cannot directly push
+		// them to the stack of previously occupied positions because they will be in reverse order
+		MyStack<Position> otherHalf = new MyStack<>();
+		for (int i = 0; i < length; i++){
+			// Even integers are colors of the caterpillar
+			if (i % 2 == 0) {
+				colors[i / 2] = chk.color;
+			}
+			// Add unoccupied position to stack
+			if (i >= newLength) {
+				otherHalf.push(chk.position);
+			}
+			chk = chk.next;
+		}
+
+		// Push unoccupied positions to stack of previously occupied positions
+		while (!otherHalf.empty()) {
+			positionsPreviouslyOccupied.push(otherHalf.pop());
+		}
+
+		// Traverse caterpillar and update colors
+		chk = this.head;
+		for (int i = 0; i < newLength; i++){
+			if (i == newLength - 1) {
+				// Set tail to last segment
+				this.tail = chk;
+			}
+			chk.color = colors[i];
+			chk = chk.next;
+		}
+
+		this.tail.next = null;
+		this.length = newLength;
 	} 
 
 
