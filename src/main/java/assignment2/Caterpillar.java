@@ -306,11 +306,15 @@ public class Caterpillar {
 					turnsNeededToDigest = 0;
 					stage = EvolutionStage.FEEDING_STAGE;
 				}
-			} catch (Exception e) {
+			} catch (IllegalStateException e) {
 				// Exception is thrown if all the energy of the cake cannot be consumed in this function
                 // Set turns to remaining energy that has not yet been consumed
 				turnsNeededToDigest = energy - i;
 				positionsPreviouslyOccupied.push(toAdd);
+				break;
+			} catch (EmptyStackException e) {
+				// If stack is empty, then we cannot add any more segments
+				turnsNeededToDigest = energy - i;
 				break;
 			}
 		}

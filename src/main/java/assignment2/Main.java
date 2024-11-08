@@ -18,13 +18,12 @@ public class Main {
         Position p2 = new Position(0, 1);
         addSegment(gus.tail, p1, GameColors.BLUE);
         addSegment(gus.tail, p2, GameColors.ORANGE);
-        gus.positionsPreviouslyOccupied.push(new Position(2, 0));
-        gus.positionsPreviouslyOccupied.push(new Position(1, 0));
-        gus.positionsPreviouslyOccupied.push(new Position(1, 1));
+        gus.positionsPreviouslyOccupied.push(new Position(0, 2));
+        gus.positionsPreviouslyOccupied.push(new Position(0, 3));
         System.out.println("1) Gus: " + gus);
         System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
 
-        gus.eat(new Cake(3));
+        gus.eat(new Cake(2));
         System.out.println("2) Gus: " + gus);
         System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
         System.out.println("Gus evolution stage: " + gus.getEvolutionStage());
@@ -35,13 +34,6 @@ public class Main {
         System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
         System.out.println("Gus evolution stage: " + gus.getEvolutionStage());
         System.out.println("Turns left to digest: " + gus.turnsNeededToDigest);
-
-        gus.move(new Position(3, 0));
-        System.out.println("4) Gus: " + gus);
-        System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
-        System.out.println("Gus evolution stage: " + gus.getEvolutionStage());
-        System.out.println("Turns left to digest: " + gus.turnsNeededToDigest);
-
     }
 
 
