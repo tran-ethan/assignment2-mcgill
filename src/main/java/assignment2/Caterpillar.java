@@ -270,9 +270,10 @@ public class Caterpillar {
 		int energy = cake.getEnergyProvided();
 		// 1 energy = 1 segment
 		for (int i = 0; i < energy; i++) {
+			Position toAdd = null;
 			try {
 				// Could throw an error if stack is empty
-				Position toAdd = positionsPreviouslyOccupied.pop();
+				toAdd = positionsPreviouslyOccupied.pop();
 
 				// Check for if the position to add is already being occupied by caterpillar
 				Segment chk = this.head;
@@ -309,6 +310,8 @@ public class Caterpillar {
 				// Exception is thrown if all the energy of the cake cannot be consumed in this function
                 // Set turns to remaining energy that has not yet been consumed
 				turnsNeededToDigest = energy - i;
+				positionsPreviouslyOccupied.push(toAdd);
+				break;
 			}
 		}
 
