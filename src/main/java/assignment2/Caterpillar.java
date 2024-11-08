@@ -113,6 +113,29 @@ public class Caterpillar {
 
 			// Add previously occupied position to stack
 			positionsPreviouslyOccupied.push(p);
+
+			// Check if caterpillar is still digesting the cake
+			if (stage == EvolutionStage.GROWING_STAGE) {
+				turnsNeededToDigest--;
+
+				if (turnsNeededToDigest == 0) {
+					stage = EvolutionStage.FEEDING_STAGE;
+				}
+
+				// Generate a random color for the new segment
+				int rand = randNumGenerator.nextInt(GameColors.SEGMENT_COLORS.length);
+				Color color = GameColors.SEGMENT_COLORS[rand];
+
+				// Add new segment to the tail
+				this.tail.next = new Segment(positionsPreviouslyOccupied.pop(), color);
+				this.tail = this.tail.next;
+				length++;
+
+				// Check if caterpillar has reached goal
+				if (length == goal) {
+					stage = EvolutionStage.BUTTERFLY;
+				}
+			}
 		} else {
 			// Position is not adjacent and orthogonal to head
 			throw new IllegalArgumentException("The caterpillar can only move to an adjacent position.");
@@ -246,7 +269,7 @@ public class Caterpillar {
 
 		int energy = cake.getEnergyProvided();
 		// 1 energy = 1 segment
-		for (int i = 1; i <= energy; i++) {
+		for (int i = 0; i < energy; i++) {
 			try {
 				// Could throw an error if stack is empty
 				Position toAdd = positionsPreviouslyOccupied.pop();
@@ -256,7 +279,7 @@ public class Caterpillar {
 				while (chk != null) {
 					if (chk.position.equals(toAdd)) {
 						// Throw exception if position is already occupied
-						throw new EmptyStackException();
+						throw new IllegalStateException();
 					}
 					chk = chk.next;
 				}
@@ -278,11 +301,11 @@ public class Caterpillar {
 				}
 
 				// Check if butterfly has consumed all the energy of the cake
-				if (i == energy) {
+				if (i == energy - 1) {
 					turnsNeededToDigest = 0;
 					stage = EvolutionStage.FEEDING_STAGE;
 				}
-			} catch (EmptyStackException e) {
+			} catch (Exception e) {
 				// Exception is thrown if all the energy of the cake cannot be consumed in this function
                 // Set turns to remaining energy that has not yet been consumed
 				turnsNeededToDigest = energy - i;
