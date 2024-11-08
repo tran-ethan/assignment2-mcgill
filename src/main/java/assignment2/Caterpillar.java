@@ -300,12 +300,6 @@ public class Caterpillar {
 					stage = EvolutionStage.BUTTERFLY;
 					return;
 				}
-
-				// Check if butterfly has consumed all the energy of the cake
-				if (i == energy - 1) {
-					turnsNeededToDigest = 0;
-					stage = EvolutionStage.FEEDING_STAGE;
-				}
 			} catch (IllegalStateException e) {
 				// Exception is thrown if all the energy of the cake cannot be consumed in this function
                 // Set turns to remaining energy that has not yet been consumed
@@ -319,6 +313,10 @@ public class Caterpillar {
 			}
 		}
 
+		// Check if all energy has been consumed
+		if (turnsNeededToDigest == 0) {
+			stage = EvolutionStage.FEEDING_STAGE;
+		}
 	}
 
 
