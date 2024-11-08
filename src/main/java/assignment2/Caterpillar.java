@@ -89,7 +89,7 @@ public class Caterpillar {
 		int y = p.getY();
 
 		// Check for adjacent position
-		if (x == xHead && Math.abs(y - yHead) == 1 || y == yHead && Math.abs(x - xHead) == 1) {
+		if ((x == xHead && Math.abs(y - yHead) == 1) || (y == yHead && Math.abs(x - xHead) == 1)) {
 
 			// Check for previously occupied position
 			Segment chk = this.head;
