@@ -32,6 +32,12 @@ public class Main {
         System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
         System.out.println("Gus evolution stage: " + gus.getEvolutionStage());
         System.out.println("Turns left to digest: " + gus.turnsNeededToDigest);
+
+        gus.move(new Position(1, 2));
+        System.out.println("3) Gus: " + gus);
+        System.out.println("Stack of previously occupied positions: " + gus.positionsPreviouslyOccupied);
+        System.out.println("Gus evolution stage: " + gus.getEvolutionStage());
+        System.out.println("Turns left to digest: " + gus.turnsNeededToDigest);
     }
 
 

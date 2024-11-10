@@ -94,6 +94,7 @@ public class Caterpillar {
 			// Check for previously occupied position
 			Position[] positions = getPositions();
 
+			Position tailPosition = this.tail.position;
 			// Do not check tail position, since it will be moved to the previous position
 			for (int i = 0; i < this.length - 1; i++) {
 				if (positions[i].equals(p)) {
@@ -105,23 +106,24 @@ public class Caterpillar {
 
 			// Move caterpillar by moving each segment to next position
 			Segment chk = this.head;
+			Position prev = p;
 			for (int i = 0; i < length; i++) {
 				Position tmp = chk.position;
-				chk.position = p;
-				p = tmp;
+				chk.position = prev;
+				prev = tmp;
 				chk = chk.next;
 			}
 
-			// Check edge case if caterpillar moves to tail position
-			if (p.equals(tail.position)) {
-				return;
-			}
-
 			// Add previously occupied position to stack
-			positionsPreviouslyOccupied.push(p);
+			positionsPreviouslyOccupied.push(prev);
 
 			if (turnsNeededToDigest == 0 && stage != EvolutionStage.ENTANGLED) {
 				stage = EvolutionStage.FEEDING_STAGE;
+			}
+
+			// Check edge case if caterpillar moves to tail position
+			if (p.equals(tailPosition)) {
+				return;
 			}
 
 			// Check if caterpillar is still digesting the cake
