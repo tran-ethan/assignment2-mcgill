@@ -22,7 +22,7 @@ public class Caterpillar {
 	public static Random randNumGenerator = new Random(1);
 
 
-	// Creates a Caterpillar with one Segment. It is up to students to decide how to implement this. 
+	// Creates a Caterpillar with one Segment. It is up to students to decide how to implement this.
 	public Caterpillar(Position p, Color c, int goal) {
 		this.head = this.tail = new Segment(p, c);
 		this.goal = goal;
@@ -55,30 +55,30 @@ public class Caterpillar {
 		}
 		return null;
 	}
-	
-	
-    // Methods that need to be added for the game to work
-    public Color[] getColors(){
-        Color[] cs = new Color[this.length];
-        Segment chk = this.head;
-        for (int i = 0; i < this.length; i++){
-            cs[i] = chk.color;
-            chk = chk.next;
-        }
-        return cs;
-    }
 
-    public Position[] getPositions(){
-        Position[] ps = new Position[this.length];
-        Segment chk = this.head;
-        for (int i = 0; i < this.length; i++){
-            ps[i] = chk.position;
-            chk = chk.next;
-        }
-        return ps;
-    }
 
-    
+	// Methods that need to be added for the game to work
+	public Color[] getColors(){
+		Color[] cs = new Color[this.length];
+		Segment chk = this.head;
+		for (int i = 0; i < this.length; i++){
+			cs[i] = chk.color;
+			chk = chk.next;
+		}
+		return cs;
+	}
+
+	public Position[] getPositions(){
+		Position[] ps = new Position[this.length];
+		Segment chk = this.head;
+		for (int i = 0; i < this.length; i++){
+			ps[i] = chk.position;
+			chk = chk.next;
+		}
+		return ps;
+	}
+
+
 	// shift all Segments to the previous Position while maintaining the old color
 	// the length of the caterpillar is not affected by this
 	public void move(Position p) throws IllegalArgumentException {
@@ -92,35 +92,41 @@ public class Caterpillar {
 		if ((x == xHead && Math.abs(y - yHead) == 1) || (y == yHead && Math.abs(x - xHead) == 1)) {
 
 			// Check for previously occupied position
-			Segment chk = this.head;
-			while (chk != null) {
-				if (chk.position.equals(p)) {
+			Position[] positions = getPositions();
+
+			// Do not check tail position, since it will be moved to the previous position
+			for (int i = 0; i < this.length - 1; i++) {
+				if (positions[i].equals(p)) {
 					this.stage = EvolutionStage.ENTANGLED;
 					System.out.println("The caterpillar has entangled itself.");
-					return;
+					break;
 				}
-				chk = chk.next;
 			}
 
 			// Move caterpillar by moving each segment to next position
-			chk = this.head;
-            for (int i = 0; i < length; i++) {
-                Position tmp = chk.position;
+			Segment chk = this.head;
+			for (int i = 0; i < length; i++) {
+				Position tmp = chk.position;
 				chk.position = p;
 				p = tmp;
 				chk = chk.next;
 			}
 
+			// Check edge case if caterpillar moves to tail position
+			if (p.equals(tail.position)) {
+				return;
+			}
+
 			// Add previously occupied position to stack
 			positionsPreviouslyOccupied.push(p);
+
+			if (turnsNeededToDigest == 0 && stage != EvolutionStage.ENTANGLED) {
+				stage = EvolutionStage.FEEDING_STAGE;
+			}
 
 			// Check if caterpillar is still digesting the cake
 			if (stage == EvolutionStage.GROWING_STAGE) {
 				turnsNeededToDigest--;
-
-				if (turnsNeededToDigest == 0) {
-					stage = EvolutionStage.FEEDING_STAGE;
-				}
 
 				// Generate a random color for the new segment
 				int rand = randNumGenerator.nextInt(GameColors.SEGMENT_COLORS.length);
@@ -148,7 +154,7 @@ public class Caterpillar {
 	public void eat(Fruit f) {
 		// Create new segment at tail of caterpillar with position of tail and color of fruit
 		Position tailPosition = positionsPreviouslyOccupied.pop();
-        tail.next = new Segment(tailPosition, f.getColor());
+		tail.next = new Segment(tailPosition, f.getColor());
 		tail = tail.next;
 
 		// Adjust length and stage
@@ -158,7 +164,7 @@ public class Caterpillar {
 		}
 	}
 
-	
+
 	// the caterpillar moves one step backwards because of sourness
 	public void eat(Pickle p) {
 		Position previous = positionsPreviouslyOccupied.pop();
@@ -213,13 +219,13 @@ public class Caterpillar {
 		this.tail = this.head;
 		this.head = prev;
 		this.head.color = GameColors.BLUE;
-		
+
 		// Clear previous positions
 		positionsPreviouslyOccupied.clear();
 	}
 
 
-	// the caterpillar embodies a slide of Swiss cheese loosing half of its segments. 
+	// the caterpillar embodies a slide of Swiss cheese loosing half of its segments.
 	public void eat(SwissCheese cheese) {
 		// Size of new caterpillar the ceiling of length / 2
 		int newLength = (length + 1) / 2;
@@ -260,10 +266,10 @@ public class Caterpillar {
 
 		this.tail.next = null;
 		this.length = newLength;
-	} 
+	}
 
 
-	
+
 	public void eat(Cake cake) {
 		this.stage = EvolutionStage.GROWING_STAGE;
 
@@ -302,7 +308,7 @@ public class Caterpillar {
 				}
 			} catch (IllegalStateException e) {
 				// Exception is thrown if all the energy of the cake cannot be consumed in this function
-                // Set turns to remaining energy that has not yet been consumed
+				// Set turns to remaining energy that has not yet been consumed
 				turnsNeededToDigest = energy - i;
 				positionsPreviouslyOccupied.push(toAdd);
 				break;
@@ -339,7 +345,7 @@ public class Caterpillar {
 		Segment s = this.head;
 		String snake = "";
 		while (s!=null) {
-			String coloredPosition = GameColors.colorToANSIColor(s.color) + 
+			String coloredPosition = GameColors.colorToANSIColor(s.color) +
 					s.position.toString() + GameColors.colorToANSIColor(Color.WHITE);
 			snake = coloredPosition + " " + snake;
 			s = s.next;
